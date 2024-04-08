@@ -351,9 +351,9 @@ def InitPos(mapStat):
             4 X 5
             7 8 9
 '''
-def GetStep(playerID, state: GameState):
-    mapStat = state.mapStat
-    sheepStat = state.sheepStat
+def GetStep(playerID, mapStat, sheepStat):
+    #mapStat = state.mapStat
+    #sheepStat = state.sheepStat
     uct_mcts = UctMctsAgent((playerID, mapStat, sheepStat), 4)
 
     actions = uct_mcts.best_move()
@@ -371,6 +371,6 @@ while (True):
     if end_program:
         STcpClient._StopConnect()
         break
-    Step = GetStep(playerID, GameState(mapStat, sheepStat)) # changed
+    Step = GetStep(playerID, mapStat, sheepStat)
 
     STcpClient.SendStep(id_package, Step)
