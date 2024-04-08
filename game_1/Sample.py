@@ -69,6 +69,8 @@ def InitPos(mapStat):
         for k in range(8):
             newI = i+dx[k]
             newJ = j+dy[k]
+            if newI < 0 or newJ < 0 or newI >= 12 or newJ >= 12:
+                continue
             if mapStat[newI][newJ] == -1:
                 return True
         return False
@@ -76,7 +78,7 @@ def InitPos(mapStat):
     options = []
     for i in range(12):
         for j in range(12):
-            if mapStat[i][j]==0 and in_edge(mapStat[i][j]):
+            if mapStat[i][j]==0 and in_edge(mapStat,i,j):
                 options.append([i,j])
 
     # return init_pos
@@ -163,7 +165,7 @@ def get_actions(playerID, state: GameState) -> list[Action]:
                     farest_pos_in_the_direction = straight_line_end(mapStat,pos,Direction(dx[k],dy[k]))
                     if farest_pos_in_the_direction!=pos:
                         sheep_number_in_this_pos = sheepStat[pos.x][pos.y]
-                        for n in range(1,sheep_number_in_this_pos):
+                        for n in range(1,int(sheep_number_in_this_pos)):
                             newActions.append(Action(pos,n,Direction(dx[k],dy[k])))
 
     return newActions
