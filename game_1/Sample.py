@@ -158,12 +158,39 @@ def getChildStates(playerID, state: GameState):
     
     return childStates
 
-def evaluation_function(state: GameState):
-    return 0
+def evaluation_function(playerID,state: GameState):
+    mapStat = state.mapStat
+    sheepStat = state.sheepStat
+
+    def calculate_free_side(pos):
+        dx = [1,1,1,0,0,-1,-1,-1]
+        dy = [1,0,-1,1,-1,1,0,-1]
+
+        x = pos.x
+        y = pos.y
+
+        count = 0
+        for k in range(8):
+            newPos = Pos(x+dx[k],y+dy[k])
+            if inBoard(newPos) and isEmpty(mapStat,newPos):
+                count += 1
+        return count
+
+    value = 0
+    for y in range(size):
+        for x in range(size):
+            if mapStat[y][x]>=1 and mapStat[y][x]<=4 and sheepStat[y][x] > 1:
+                if mapStat[y][x] == playerID:
+                    value += calculate_free_side(Pos(x,y)) * sheepStat[y][x]
+                else:
+                    value -= calculate_free_side(Pos(x,y)) * sheepStat[y][x]
+
+    
+    return value
 
 def find_max_value(playerID, state: GameState, alpha, beta, depth):
-    if depth == 3:
-        return evaluation_function(state)
+    if depth == 2:
+        return evaluation_function(playerID,state)
     all_child_states = getChildStates(playerID,state)
     max_score = -1000000
     for child_state in all_child_states:
@@ -176,8 +203,8 @@ def find_max_value(playerID, state: GameState, alpha, beta, depth):
     return max_score
 
 def find_min_value(playerID, state: GameState, alpha, beta, depth):
-    if depth == 3:
-        return evaluation_function(state)
+    if depth == 2:
+        return evaluation_function(playerID,state)
     all_child_states = getChildStates(playerID, state)
     min_score = 1000000
     for child_state in all_child_states:
@@ -236,35 +263,41 @@ def GetStep(playerID, mapStat, sheepStat):
 
     state = GameState(mapStat, sheepStat)
     actions = get_actions(playerID, state)
-    # max_value = -1000000
-    # for action in actions:
-    #     pos = action.pos
-    #     farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
-    #     newMapStat = deepcopy(mapStat)
-    #     newSheepStat = deepcopy(sheepStat)
-    #     newSheepStat[pos.y][pos.x] -= action.sheep_number
-    #     newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
-    #     newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = playerID
+    max_value = -10000000
+    for action in actions:
+        pos = action.pos
+        farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
+        newMapStat = deepcopy(mapStat)
+        newSheepStat = deepcopy(sheepStat)
+        newSheepStat[pos.y][pos.x] -= action.sheep_number
+        newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
+        newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = playerID
 
-    #     the_value = find_min_value(playerID, GameState(newMapStat,newSheepStat),-1000000,1000000,1)
+        the_value = find_min_value(playerID, GameState(newMapStat,newSheepStat),-1000000,1000000,1)
 
-    #     if the_value > max_value:
-    #         max_value = the_value
-    #         max_action = action
+        if the_value > max_value:
+            max_value = the_value
+            max_action = action
     
     print_mapStat(mapStat)
     print_sheepStat(sheepStat)
 
+    if max_action:
+        step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
+    else:
+        step = []
+    return step
+
     # print(actions)
     
-    if len(actions)>0:
-        max_action = actions[0]
-        print(max_action.direction.x, max_action.direction.y)
-        step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
+    # if len(actions)>0:
+    #     max_action = actions[0]
+    #     print(max_action.direction.x, max_action.direction.y)
+    #     step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
 
-        return step
-    else:
-        return []
+    #     return step
+    # else:
+    #     return []
 
 # player initial
 (id_package, playerID, mapStat) = STcpClient.GetMap()
@@ -278,7 +311,5 @@ while (True):
         STcpClient._StopConnect()
         break
     Step = GetStep(playerID, mapStat, sheepStat)
-
-    print(Step)
 
     STcpClient.SendStep(id_package, Step)
