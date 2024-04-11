@@ -138,64 +138,64 @@
   ('numpy\\linalg\\_umath_linalg.cp311-win_amd64.pyd',
    'C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy\\linalg\\_umath_linalg.cp311-win_amd64.pyd',
    'EXTENSION'),
-  ('api-ms-win-crt-conio-l1-1-0.dll',
+  ('api-ms-win-crt-string-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-conio-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-crt-process-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-process-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-crt-filesystem-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-string-l1-1-0.dll',
    'BINARY'),
   ('api-ms-win-crt-locale-l1-1-0.dll',
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-locale-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-crt-stdio-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-crt-heap-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-heap-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-crt-convert-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-convert-l1-1-0.dll',
-   'BINARY'),
   ('api-ms-win-crt-environment-l1-1-0.dll',
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-environment-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-crt-math-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-math-l1-1-0.dll',
-   'BINARY'),
-  ('VCRUNTIME140.dll',
-   'C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python311\\VCRUNTIME140.dll',
-   'BINARY'),
-  ('api-ms-win-crt-time-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-time-l1-1-0.dll',
    'BINARY'),
   ('api-ms-win-crt-runtime-l1-1-0.dll',
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-crt-string-l1-1-0.dll',
+  ('api-ms-win-crt-conio-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-string-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-conio-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-crt-private-l1-1-0.dll',
+  ('api-ms-win-crt-heap-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-private-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-stdio-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-math-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-math-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-filesystem-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-time-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-time-l1-1-0.dll',
+   'BINARY'),
+  ('VCRUNTIME140.dll',
+   'C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python311\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('api-ms-win-crt-convert-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-convert-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-process-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-process-l1-1-0.dll',
    'BINARY'),
   ('api-ms-win-crt-utility-l1-1-0.dll',
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-utility-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-private-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-crt-private-l1-1-0.dll',
    'BINARY'),
   ('libssl-1_1.dll',
    'C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python311\\DLLs\\libssl-1_1.dll',
@@ -219,89 +219,61 @@
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\ucrtbase.dll',
    'BINARY'),
-  ('api-ms-win-core-util-l1-1-0.dll',
+  ('api-ms-win-core-processthreads-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-util-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-localization-l1-2-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-localization-l1-2-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-timezone-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-timezone-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-sysinfo-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-profile-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-profile-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-synch-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-synch-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-debug-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-debug-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-memory-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-memory-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-file-l2-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-file-l2-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-namedpipe-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',
-   'BINARY'),
-  ('api-ms-win-core-rtlsupport-l1-1-0.dll',
-   'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',
    'BINARY'),
   ('api-ms-win-core-processthreads-l1-1-1.dll',
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-processthreads-l1-1-1.dll',
    'BINARY'),
-  ('api-ms-win-core-interlocked-l1-1-0.dll',
+  ('api-ms-win-core-file-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-interlocked-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-file-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-synch-l1-2-0.dll',
+  ('api-ms-win-core-file-l2-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-synch-l1-2-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-file-l2-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-file-l1-2-0.dll',
+  ('api-ms-win-core-util-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-file-l1-2-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-util-l1-1-0.dll',
    'BINARY'),
   ('api-ms-win-core-handle-l1-1-0.dll',
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-handle-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-datetime-l1-1-0.dll',
+  ('api-ms-win-core-interlocked-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-datetime-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-interlocked-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-processthreads-l1-1-0.dll',
+  ('api-ms-win-core-namedpipe-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-libraryloader-l1-1-0.dll',
+  ('api-ms-win-core-errorhandling-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-file-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-heap-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-timezone-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-timezone-l1-1-0.dll',
    'BINARY'),
   ('api-ms-win-core-string-l1-1-0.dll',
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-string-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-file-l1-1-0.dll',
+  ('api-ms-win-core-libraryloader-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-file-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',
    'BINARY'),
   ('api-ms-win-core-processenvironment-l1-1-0.dll',
    'C:\\Program '
@@ -311,13 +283,41 @@
    'C:\\Program '
    'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-console-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-heap-l1-1-0.dll',
+  ('api-ms-win-core-memory-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-heap-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-memory-l1-1-0.dll',
    'BINARY'),
-  ('api-ms-win-core-errorhandling-l1-1-0.dll',
+  ('api-ms-win-core-sysinfo-l1-1-0.dll',
    'C:\\Program '
-   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-profile-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-profile-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-datetime-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-datetime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-localization-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-localization-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-synch-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-debug-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-debug-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-synch-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\OpenLogic\\jre-8.0.392.08-hotspot\\jre\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',
    'BINARY'),
   ('base_library.zip',
    'C:\\Users\\USER\\Documents\\大四下各科\\人工智慧總整與實作\\AI_project2_2024\\game_1\\build\\Sample_1.exe\\base_library.zip',

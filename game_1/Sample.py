@@ -26,7 +26,7 @@ class Direction:
             return 5
         elif self.x == 1 and self.y==0:
             return 6
-        elif self.x == -1 and self.y==11:
+        elif self.x == -1 and self.y==1:
             return 7
         elif self.x == 0 and self.y==1:
             return 8
@@ -58,6 +58,27 @@ def reverse_board(board):
             new_board[j][i] = board[i][j]
     return new_board
 
+def print_sheepStat(sheepStat):
+    print("sheep stat")
+    for y in range(size):
+        for x in range(size):
+            if sheepStat[y][x]==0:
+                print(".",end=" ")
+            else:
+                print(int(sheepStat[y][x]),end=" ")
+        print("")
+
+def print_mapStat(mapStat):
+    print("map stat")
+    for y in range(size):
+        for x in range(size):
+            if mapStat[y][x]<=4 and mapStat[y][x]>=1:
+                print(int(mapStat[y][x]),end=" ")
+            elif mapStat[y][x]==-1:
+                print("x",end=" ")
+            else:
+                print(".",end=" ")
+        print("")
 '''
     選擇起始位置
     選擇範圍僅限場地邊緣(至少一個方向為牆)
@@ -91,16 +112,7 @@ def InitPos(mapStat):
             if true_mapStat[y][x]==0 and beside_wall(true_mapStat,y,x):
                 options.append([x,y])
 
-    print("map stat")
-    for y in range(size):
-        for x in range(size):
-            if true_mapStat[y][x]<=4 and true_mapStat[y][x]>=1:
-                print(int(true_mapStat[y][x]),end=" ")
-            elif true_mapStat[y][x]==-1:
-                print("X",end="")
-            else:
-                print(".",end=" ")
-        print("")
+    print_mapStat(mapStat)
 
     # return init_pos
     return random.choice(options)
@@ -138,9 +150,9 @@ def getChildStates(playerID, state: GameState):
         newSheepStat = deepcopy(sheepStat)
 
         newSheepStat[pos.y][pos.x] -= action.sheep_number
-        newSheepStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] += action.sheep_number
+        newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
 
-        newMapStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] = playerID
+        newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = playerID
 
         childStates.append(GameState(newMapStat,newSheepStat))
     
@@ -230,40 +242,29 @@ def GetStep(playerID, mapStat, sheepStat):
     #     farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
     #     newMapStat = deepcopy(mapStat)
     #     newSheepStat = deepcopy(sheepStat)
-    #     newSheepStat[pos.x][pos.y] -= action.sheep_number
-    #     newSheepStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] += action.sheep_number
-    #     newMapStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] = playerID
+    #     newSheepStat[pos.y][pos.x] -= action.sheep_number
+    #     newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
+    #     newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = playerID
 
     #     the_value = find_min_value(playerID, GameState(newMapStat,newSheepStat),-1000000,1000000,1)
 
     #     if the_value > max_value:
     #         max_value = the_value
     #         max_action = action
-    print("map stat")
-    for y in range(size):
-        for x in range(size):
-            if mapStat[y][x]<=4 and mapStat[y][x]>=1:
-                print(int(mapStat[y][x]),end=" ")
-            elif mapStat[y][x]==-1:
-                print("x",end=" ")
-            else:
-                print(".",end=" ")
-        print("")
-    print("sheep stat")
-    for y in range(size):
-        for x in range(size):
-            if sheepStat[y][x]==0:
-                print(".",end=" ")
-            else:
-                print(int(sheepStat[y][x]),end=" ")
-        print("")
-    max_action = actions[0]
-    step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
+    
+    print_mapStat(mapStat)
+    print_sheepStat(sheepStat)
 
-    # print(step)
+    # print(actions)
+    
+    if len(actions)>0:
+        max_action = actions[0]
+        print(max_action.direction.x, max_action.direction.y)
+        step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
 
-    return step
-
+        return step
+    else:
+        return []
 
 # player initial
 (id_package, playerID, mapStat) = STcpClient.GetMap()
@@ -277,5 +278,7 @@ while (True):
         STcpClient._StopConnect()
         break
     Step = GetStep(playerID, mapStat, sheepStat)
+
+    print(Step)
 
     STcpClient.SendStep(id_package, Step)
