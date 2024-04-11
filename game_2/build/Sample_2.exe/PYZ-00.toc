@@ -1,6 +1,6 @@
-('C:\\Users\\USER\\Documents\\大四下各科\\人工智慧總整與實作\\AI_project2_2024\\game_2\\build\\Sample_2.exe\\PYZ-00.pyz',
+('C:\\Users\\USER\\Documents\\大四下各科\\人工智慧總整與實作\\AI_project2_2024_0408\\game_2\\build\\Sample_2.exe\\PYZ-00.pyz',
  [('STcpClient',
-   'C:\\Users\\USER\\Documents\\大四下各科\\人工智慧總整與實作\\AI_project2_2024\\game_2\\STcpClient.py',
+   'C:\\Users\\USER\\Documents\\大四下各科\\人工智慧總整與實作\\AI_project2_2024_0408\\game_2\\STcpClient.py',
    'PYMODULE'),
   ('__future__',
    'C:\\Users\\USER\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\__future__.py',

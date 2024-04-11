@@ -123,10 +123,10 @@ def GetMap():
     playerID = structItem.unpack(rbPlayer)[0]
 
     # unpack map
-    map_current = zeros([12, 12])
-    for i in range(12):
+    map_current = zeros([15, 15])
+    for i in range(15):
         temp = []
-        for _ in range(12):
+        for _ in range(15):
             rbBoard = _RecvUntil(socketServer, structItem.size)
             if rbBoard is None:
                 print("[Error] : connection lose, trying to reconnect...")
@@ -174,10 +174,10 @@ def GetBoard():
         return True, 0, None, None
 
     # unpack map
-    map_current = zeros([12, 12])
-    for i in range(12):
+    map_current = zeros([15, 15])
+    for i in range(15):
         temp = []
-        for _ in range(12):
+        for _ in range(15):
             rbBoard = _RecvUntil(socketServer, structItem.size)
             if rbBoard is None:
                 print("[Error] : connection lose, trying to reconnect...")
@@ -189,10 +189,10 @@ def GetBoard():
         map_current[i] = array(temp)
 
     # unpack sheep condition
-    game_current = zeros([12, 12])
-    for i in range(12):
+    game_current = zeros([15, 15])
+    for i in range(15):
         temp = []
-        for _ in range(12):
+        for _ in range(15):
             rbSheep = _RecvUntil(socketServer, structItem.size)
             if rbSheep is None:
                 print("[Error] : connection lose, trying to reconnect...")

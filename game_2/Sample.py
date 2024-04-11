@@ -3,7 +3,7 @@ import numpy as np
 import random
 from copy import deepcopy
 
-size=12
+size=15
 
 class Pos:
     def __init__(self, x, y):
@@ -189,7 +189,7 @@ def evaluation_function(playerID,state: GameState):
     return value
 
 def find_max_value(playerID, state: GameState, alpha, beta, depth):
-    if depth == 2:
+    if depth == 1:
         return evaluation_function(playerID,state)
     all_child_states = getChildStates(playerID,state)
     max_score = -1000000
@@ -203,7 +203,7 @@ def find_max_value(playerID, state: GameState, alpha, beta, depth):
     return max_score
 
 def find_min_value(playerID, state: GameState, alpha, beta, depth):
-    if depth == 2:
+    if depth == 1:
         return evaluation_function(playerID,state)
     all_child_states = getChildStates(playerID, state)
     min_score = 1000000
