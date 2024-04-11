@@ -179,14 +179,6 @@ class GameSimulation:
                 return False
         return True
 
-    def get_realm(self, mapStat):
-        realm = {1: 0, 2: 0, 3: 0, 4: 0}
-        for i in range(len(mapStat)):
-            for j in range(len(mapStat[0])):
-                if 1 <= mapStat[i][j] <= 4:
-                    realm[mapStat[i][j]] += 1
-        return realm
-
     def dfs(self, mapStat, playerID, visited, i, j):
         if i < 0 or i >= self.board_size or j < 0 or j >= self.board_size or visited[i][j] or mapStat[i][j] != playerID:
             return 0
@@ -243,7 +235,7 @@ class UctMctsAgent:
         self.tree = Tree(state)
         self.playerID = state[0]
         self.rule_id = rule_id
-        self.node_count = 300                     # for changing cell num if needed
+        self.node_count = 64                     # for changing cell num if needed # 300
         self.game_simulation = GameSimulation(12) # for changing size if needed
 
     def select_node(self, node):
