@@ -3,6 +3,8 @@ import numpy as np
 import random
 from copy import deepcopy
 
+size=12
+
 class Pos:
     def __init__(self, x, y):
         self.x = x
@@ -14,19 +16,19 @@ class Direction:
     def mapping(self):
         if self.x == -1 and self.y==-1:
             return 1
-        elif self.x == -1 and self.y==0:
-            return 2
-        elif self.x == -1 and self.y==1:
-            return 3
         elif self.x == 0 and self.y==-1:
+            return 2
+        elif self.x == 1 and self.y==-1:
+            return 3
+        elif self.x == -1 and self.y==0:
             return 4
         elif self.x == 0 and self.y==0: # not use
             return 5
-        elif self.x == 0 and self.y==1:
-            return 6
-        elif self.x == 1 and self.y==-1:
-            return 7
         elif self.x == 1 and self.y==0:
+            return 6
+        elif self.x == -1 and self.y==11:
+            return 7
+        elif self.x == 0 and self.y==1:
             return 8
         elif self.x == 1 and self.y==1:
             return 9
@@ -49,6 +51,13 @@ class Action:
         self.sheep_number = sheep_number
         self.direction = direction
 
+def reverse_board(board):
+    new_board = deepcopy(board)
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            new_board[j][i] = board[i][j]
+    return new_board
+
 '''
     選擇起始位置
     選擇範圍僅限場地邊緣(至少一個方向為牆)
@@ -63,23 +72,35 @@ def InitPos(mapStat):
         Write your code here
 
     '''
-    def in_edge(mapStat,i,j):
-        dx = [1,1,1,0,0,-1,-1,-1]
-        dy = [1,0,-1,1,-1,1,0,-1]
-        for k in range(8):
-            newI = i+dx[k]
-            newJ = j+dy[k]
-            if newI < 0 or newJ < 0 or newI >= 12 or newJ >= 12:
-                continue
-            if mapStat[newI][newJ] == -1:
+    def beside_wall(mapStat,y,x):
+        dx = [0,1,0,-1]
+        dy = [-1,0,1,0]
+        for k in range(4):
+            newY = y+dy[k]
+            newX = x+dx[k]
+            if newY < 0 or newY < 0 or newX >= size or newY >= size:
+                return True
+            if mapStat[newY][newX] == -1:
                 return True
         return False
-
+    
+    true_mapStat = reverse_board(mapStat)
     options = []
-    for i in range(12):
-        for j in range(12):
-            if mapStat[i][j]==0 and in_edge(mapStat,i,j):
-                options.append([i,j])
+    for y in range(size):
+        for x in range(size):
+            if true_mapStat[y][x]==0 and beside_wall(true_mapStat,y,x):
+                options.append([x,y])
+
+    print("map stat")
+    for y in range(size):
+        for x in range(size):
+            if true_mapStat[y][x]<=4 and true_mapStat[y][x]>=1:
+                print(int(true_mapStat[y][x]),end=" ")
+            elif true_mapStat[y][x]==-1:
+                print("X",end="")
+            else:
+                print(".",end=" ")
+        print("")
 
     # return init_pos
     return random.choice(options)
@@ -87,13 +108,17 @@ def InitPos(mapStat):
 def nextPos(pos, direction):
     return Pos(pos.x+direction.x,pos.y+direction.y)
 
+def inBoard(pos: Pos):
+    return pos.x>=0 and pos.x<size and pos.y>=0 and pos.y<size
+
 def isEmpty(mapStat, pos):
-    return mapStat[pos.x][pos.y] == 0
+    return mapStat[pos.y][pos.x] == 0
 
 def straight_line_end(mapStat, pos, direction):
     currentPos = pos
     while True:
-        if isEmpty(mapStat, nextPos(currentPos,direction)):
+        nextpos = nextPos(currentPos,direction)
+        if inBoard(nextpos) and isEmpty(mapStat, nextpos):
             currentPos = nextPos(currentPos,direction)
         else:
             break
@@ -112,7 +137,7 @@ def getChildStates(playerID, state: GameState):
         newMapStat = deepcopy(mapStat)
         newSheepStat = deepcopy(sheepStat)
 
-        newSheepStat[pos.x][pos.y] -= action.sheep_number
+        newSheepStat[pos.y][pos.x] -= action.sheep_number
         newSheepStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] += action.sheep_number
 
         newMapStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] = playerID
@@ -122,12 +147,12 @@ def getChildStates(playerID, state: GameState):
     return childStates
 
 def evaluation_function(state: GameState):
-    pass
+    return 0
 
 def find_max_value(playerID, state: GameState, alpha, beta, depth):
     if depth == 3:
         return evaluation_function(state)
-    all_child_states = getChildStates(state)
+    all_child_states = getChildStates(playerID,state)
     max_score = -1000000
     for child_state in all_child_states:
         score = find_min_value(playerID, child_state, alpha, beta, depth+1)
@@ -141,7 +166,7 @@ def find_max_value(playerID, state: GameState, alpha, beta, depth):
 def find_min_value(playerID, state: GameState, alpha, beta, depth):
     if depth == 3:
         return evaluation_function(state)
-    all_child_states = getChildStates(state)
+    all_child_states = getChildStates(playerID, state)
     min_score = 1000000
     for child_state in all_child_states:
         score = find_max_value(playerID, child_state, alpha, beta, depth+1)
@@ -157,16 +182,16 @@ def get_actions(playerID, state: GameState) -> list[Action]:
     mapStat = state.mapStat
     sheepStat = state.sheepStat
     newActions = []
-    for i in range(12):
-        for j in range(12):
-            if mapStat[i][j] == playerID:
-                pos = Pos(i,j)
+    for y in range(size):
+        for x in range(size):
+            if mapStat[y][x] == playerID and sheepStat[y][x]>1:
+                pos = Pos(x,y)
                 for k in range(8):
-                    farest_pos_in_the_direction = straight_line_end(mapStat,pos,Direction(dx[k],dy[k]))
+                    farest_pos_in_the_direction = straight_line_end(mapStat,pos,Direction(dy[k],dx[k]))
                     if farest_pos_in_the_direction!=pos:
-                        sheep_number_in_this_pos = sheepStat[pos.x][pos.y]
+                        sheep_number_in_this_pos = sheepStat[pos.y][pos.x]
                         for n in range(1,int(sheep_number_in_this_pos)):
-                            newActions.append(Action(pos,n,Direction(dx[k],dy[k])))
+                            newActions.append(Action(pos,n,Direction(dy[k],dx[k])))
 
     return newActions
 '''
@@ -188,32 +213,54 @@ def get_actions(playerID, state: GameState) -> list[Action]:
             7 8 9
 '''
 
-def GetStep(playerID, state: GameState):
+def GetStep(playerID, mapStat, sheepStat):
     # step = [(0, 0), 0, 1]
     '''
     Write your code here
     
     '''
-    mapStat = state.mapStat
-    sheepStat = state.sheepStat
+    mapStat = reverse_board(mapStat)
+    sheepStat = reverse_board(sheepStat)
+
+    state = GameState(mapStat, sheepStat)
     actions = get_actions(playerID, state)
-    max_value = -1000000
-    for action in actions:
-        pos = action.pos
-        farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
-        newMapStat = deepcopy(mapStat)
-        newSheepStat = deepcopy(sheepStat)
-        newSheepStat[pos.x][pos.y] -= action.sheep_number
-        newSheepStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] += action.sheep_number
-        newMapStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] = playerID
+    # max_value = -1000000
+    # for action in actions:
+    #     pos = action.pos
+    #     farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
+    #     newMapStat = deepcopy(mapStat)
+    #     newSheepStat = deepcopy(sheepStat)
+    #     newSheepStat[pos.x][pos.y] -= action.sheep_number
+    #     newSheepStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] += action.sheep_number
+    #     newMapStat[farest_pos_in_the_direction.x][farest_pos_in_the_direction.y] = playerID
 
-        the_value = find_min_value(playerID, GameState(newMapStat,newSheepStat),-1000000,1000000,1)
+    #     the_value = find_min_value(playerID, GameState(newMapStat,newSheepStat),-1000000,1000000,1)
 
-        if the_value > max_value:
-            max_value = the_value
-            max_action = action
-
+    #     if the_value > max_value:
+    #         max_value = the_value
+    #         max_action = action
+    print("map stat")
+    for y in range(size):
+        for x in range(size):
+            if mapStat[y][x]<=4 and mapStat[y][x]>=1:
+                print(int(mapStat[y][x]),end=" ")
+            elif mapStat[y][x]==-1:
+                print("x",end=" ")
+            else:
+                print(".",end=" ")
+        print("")
+    print("sheep stat")
+    for y in range(size):
+        for x in range(size):
+            if sheepStat[y][x]==0:
+                print(".",end=" ")
+            else:
+                print(int(sheepStat[y][x]),end=" ")
+        print("")
+    max_action = actions[0]
     step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
+
+    # print(step)
 
     return step
 
@@ -229,6 +276,6 @@ while (True):
     if end_program:
         STcpClient._StopConnect()
         break
-    Step = GetStep(playerID, GameState(mapStat, sheepStat)) # changed
+    Step = GetStep(playerID, mapStat, sheepStat)
 
     STcpClient.SendStep(id_package, Step)
