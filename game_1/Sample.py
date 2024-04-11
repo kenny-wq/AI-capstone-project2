@@ -87,35 +87,57 @@ def print_mapStat(mapStat):
     init_pos=[x,y],代表起始位置
     
 '''
+def init_pos_valid(mapStat, init_pos): 
+        x, y = init_pos
+        if mapStat[x][y] != 0:
+            return False
+        
+        map_expanded = np.pad(mapStat.copy(), pad_width=1, mode='constant', constant_values=0)
+        window = map_expanded[x:x+3, y:y+3]
+        return np.any(window == -1)
+
+def bound_valid(x, y, board_size):
+        return (x >= 0) and (x < board_size) and (y >= 0) and (y < board_size)
+
+def reverse_pos(pos):
+        x, y = pos
+        return (y, x)
+
+def set_init_pos(mapStat, board_size=12):
+        surrounding = [
+            (-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2),
+            (-1, -2), (-1, -1), (-1, 0), (-1, 1), (-1, 2),
+            (0, -2),  (0, -1),           (0, 1),  (0, 2),
+            (1, -2),  (1, -1),  (1, 0),  (1, 1),  (1, 2),
+            (2, -2),  (2, -1),  (2, 0),  (2, 1),  (2, 2)
+        ]
+
+        max_count = -1
+        best_init_pos = [0, 0]
+
+        for i in range(board_size):
+            for j in range(board_size):
+                init_pos = [i, j]
+
+                if not init_pos_valid(mapStat, init_pos):
+                    continue
+
+                count = 0
+                for dx, dy in surrounding:
+                    nx, ny = init_pos[0] + dx, init_pos[1] + dy
+                    if bound_valid(nx, ny, board_size) and mapStat[nx][ny] == 0:
+                        count += 1
+
+                if count > max_count:
+                    max_count = count
+                    best_init_pos = init_pos
+
+        return best_init_pos
+
 def InitPos(mapStat):
-    # init_pos = [0, 0]
-    '''
-        Write your code here
-
-    '''
-    def beside_wall(mapStat,y,x):
-        dx = [0,1,0,-1]
-        dy = [-1,0,1,0]
-        for k in range(4):
-            newY = y+dy[k]
-            newX = x+dx[k]
-            if newY < 0 or newY < 0 or newX >= size or newY >= size:
-                return True
-            if mapStat[newY][newX] == -1:
-                return True
-        return False
-    
-    true_mapStat = reverse_board(mapStat)
-    options = []
-    for y in range(size):
-        for x in range(size):
-            if true_mapStat[y][x]==0 and beside_wall(true_mapStat,y,x):
-                options.append([x,y])
-
-    print_mapStat(mapStat)
-
-    # return init_pos
-    return random.choice(options)
+    init_pos = set_init_pos(mapStat)
+    init_pos = reverse_pos(init_pos) # backpropagation
+    return init_pos
 
 def nextPos(pos, direction):
     return Pos(pos.x+direction.x,pos.y+direction.y)
