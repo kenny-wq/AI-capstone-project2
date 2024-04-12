@@ -28,51 +28,35 @@ class GameSimulation:
     def __init__(self, board_size=12):
         self.board_size = board_size
 
-    # reverse row and column of the gameState(mapStat&sheepStat)
-    def reverse_board(self, state):
-        playerID, mapStat, sheepStat = state
-        newMapStat = deepcopy(mapStat)#mapStat.copy()
-        newSheepStat = deepcopy(sheepStat)#sheepStat.copy()
-        for i in range(len(mapStat)):
-            for j in range(len(mapStat[0])):
-                newMapStat[j][i] = mapStat[i][j]
-                newSheepStat[j][i] = sheepStat[i][j]
-        return (playerID, newMapStat, newSheepStat)
-
     def reverse_pos(self, pos):
         x, y = pos
         return (y, x)
 
-    # reverse direction of the action(x&y be the same.)
+    # reverse direction of the action, but x&y be the same
     def reverse_action(self, action):
         direcs = {1: 1, 2: 4, 3: 7, 4: 2, 6: 8, 7: 3, 8: 6, 9: 9}
         x, y = action[0]
         m = action[1]
         dir = action[2]
+
         newx, newy = x, y
         newdir = direcs[dir]
-
         return [(newx, newy), m, newdir]
 
-    # possible directions in the game
-    def possible_dir(self):
+    # directions that are possible
+    def dir_possible(self):
         # center = 5
         return [1, 2, 3, 4, 6, 7, 8, 9]
 
-    # mapping the directions
+    # mapping directions
     def dir_value(self, dir):
         direction_map = {
-            1: (-1, -1),
-            2: (-1, 0),
-            3: (-1, 1),
-            4: (0, -1),
-            6: (0, 1),
-            7: (1, -1),
-            8: (1, 0),
-            9: (1, 1)
+            1: (-1, -1), 2: (-1, 0), 3: (-1, 1), 4: (0, -1),
+            6: (0, 1),   7: (1, -1), 8: (1, 0),  9: (1, 1)
         }
         return direction_map[dir]
 
+    # check if initial pos is valid
     def init_pos_valid(self, mapStat, init_pos): 
         x, y = init_pos
         if mapStat[x][y] != 0:
@@ -82,11 +66,13 @@ class GameSimulation:
         window = map_expanded[x:x+3, y:y+3]
         return np.any(window == -1)
 
+    # check if pos is within bound
     def bound_valid(self, x, y, board_size):
-        return (x >= 0) and (x < board_size) and (y >= 0) and (y < board_size)
+        if x >= 0 and x < board_size and y >= 0 and y < board_size :
+            return 1 
 
     def set_init_pos(self, mapStat, board_size=12):
-        surrounding = [
+        realm = [
             (-2, -2), (-2, -1), (-2, 0), (-2, 1), (-2, 2),
             (-1, -2), (-1, -1), (-1, 0), (-1, 1), (-1, 2),
             (0, -2),  (0, -1),           (0, 1),  (0, 2),
@@ -94,41 +80,42 @@ class GameSimulation:
             (2, -2),  (2, -1),  (2, 0),  (2, 1),  (2, 2)
         ]
 
-        max_count = -1
-        best_init_pos = [0, 0]
+        max_ct = -1
+        best_init = [0, 0]
 
         for i in range(board_size):
             for j in range(board_size):
                 init_pos = [i, j]
-
                 if not self.init_pos_valid(mapStat, init_pos):
                     continue
+                ct = 0
 
-                count = 0
-                for dx, dy in surrounding:
+                for dx, dy in realm:
                     nx, ny = init_pos[0] + dx, init_pos[1] + dy
                     if self.bound_valid(nx, ny, board_size) and mapStat[nx][ny] == 0:
-                        count += 1
+                        ct += 1
 
-                if count > max_count:
-                    max_count = count
-                    best_init_pos = init_pos
+                if ct > max_ct:
+                    best_init = init_pos
+                    max_ct = ct
 
-        return best_init_pos
+        return best_init
 
-    # check direction until reach boundary of the map / hit something isn't 0
+    # check direction when reach boundary of the map / hit something not 0
     def check_direction(self, x, y, dir, mapStat):
         dx, dy = self.dir_value(dir)
         while True:
             if not (0 <= x + dx < len(mapStat) and 0 <= y + dy < len(mapStat[0])):
                 break
+
             if mapStat[x + dx][y + dy] != 0:
                 break
+
             x += dx
             y += dy
         return (x, y)
 
-    # return new state after applying action
+    # apply action to get new states
     def apply_action(self, state, action):
         playerID, mapStat, sheepStat = state
         newMapStat = mapStat.copy()
@@ -139,16 +126,15 @@ class GameSimulation:
         dir = action[2]
 
         newx, newy = self.check_direction(x, y, dir, mapStat)
-        # update newMapStat & newSheepStat
+        # update map & sheep state, playerID
         newMapStat[newx][newy] = playerID
         newSheepStat[x][y] -= m
         newSheepStat[newx][newy] = m
-
         newPlayerID = playerID % 4 + 1
 
         return (newPlayerID, newMapStat, newSheepStat)
 
-    # return all possible actions
+    # get possible space to move
     def remain_space(self, state):
         playerID, mapStat, sheepStat = state
         actions = []
@@ -160,7 +146,7 @@ class GameSimulation:
                 if mapStat[i][j] == playerID and int(sheepStat[i][j]) > 1:
                     sheep_splitable.append((i, j))
         for i, j in sheep_splitable:
-            for dir in self.possible_dir():
+            for dir in self.dir_possible():
                 newx, newy = self.check_direction(i, j, dir, mapStat)
                 if newx == i and newy == j:
                     continue
@@ -177,12 +163,14 @@ class GameSimulation:
         for i in range(1, 5):
             if self.remain_space((i, state[1], state[2])):
                 return False
+            
         return True
 
     def dfs(self, mapStat, playerID, visited, i, j):
         if i < 0 or i >= self.board_size or j < 0 or j >= self.board_size or visited[i][j] or mapStat[i][j] != playerID:
             return 0
         visited[i][j] = True
+        #i-1, i+1, j-1, j+1
         return 1 + self.dfs(mapStat, playerID, visited, i - 1, j) \
                     + self.dfs(mapStat, playerID, visited, i + 1, j) \
                     + self.dfs(mapStat, playerID, visited, i, j - 1) \
@@ -215,7 +203,7 @@ class GameSimulation:
         else:
             return 2
 
-###################################--MCT--###################################
+###################################--MCTS--###################################
 
 class Node:
     def __init__(self, state, action=None, parent=None):
@@ -235,7 +223,7 @@ class UctMctsAgent:
         self.tree = Tree(state)
         self.playerID = state[0]
         self.rule_id = rule_id
-        self.node_count = 64                     # for changing cell num if needed # 300
+        self.node_ct = 64                         # for changing cell num if needed # 300
         self.game_simulation = GameSimulation(12) # for changing size if needed
 
     def select_node(self, node):
@@ -257,12 +245,13 @@ class UctMctsAgent:
             if not actions:
                 state = (state[0] % 4 + 1, state[1], state[2])
                 continue
+
             action = random.choice(actions)
             state = self.game_simulation.apply_action(state, action)
 
         # team up 1+3 & 2+4, self.rule_id == 4
         group_pair = 1
-        if self.playerID == 1 or self.playerID == 1:
+        if self.playerID == 1 or self.playerID == 3:
             group_pair = 1    
         else: 
             group_pair = 2
@@ -272,7 +261,7 @@ class UctMctsAgent:
             return 1
         else:
             return -1
-        # others
+        # other game settings
         """
         winner = self.game_simulation.get_winner(state)
         if self.playerID == winner:
@@ -295,7 +284,7 @@ class UctMctsAgent:
 
     def best_move(self):
         root = self.tree.root
-        for _ in range(self.node_count):
+        for _ in range(self.node_ct):
             target = self.select_node(root)
             if target.children is not None:#
                 self.add_child(target)
