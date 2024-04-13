@@ -196,13 +196,6 @@ class GameSimulation:
         cells = self.get_connected_cell(mapStat, playerID)
         return round(sum([cell ** 1.25 for cell in cells]))
 
-    """
-    def get_winner(self, state):
-        playerID, mapStat, sheepStat = state
-        scores = [self.get_score((i, mapStat, sheepStat)) for i in range(1, 5)]
-        return scores.index(max(scores)) + 1
-    """
-
     def get_winner_group(self, state):
         scores = [self.get_score((i, state[1], state[2])) for i in range(1, 5)]
         if scores[0] + scores[2] > scores[1] + scores[3]:
@@ -268,14 +261,6 @@ class UctMctsAgent:
             return 1
         else:
             return -1
-        # other game settings
-        """
-        winner = self.game_simulation.get_winner(state)
-        if self.playerID == winner:
-            return 1
-        else:
-            return -1
-        """
 
     # backpropagation, calculate the reward for player who just played at the node 
     def back_pg(self, node, reward):
