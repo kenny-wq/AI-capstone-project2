@@ -205,15 +205,23 @@ def evaluation_function(playerID,state: GameState):
 
     value = 0
     free_side = 0
+    stuck_penalty = 0
     for y in range(size):
         for x in range(size):
             if mapStat[y][x]>=1 and mapStat[y][x]<=4 and sheepStat[y][x] > 1:
+                num_free_side = calculate_free_side(Pos(x,y))
                 if mapStat[y][x] == playerID:
-                    free_side += calculate_free_side(Pos(x,y)) * sheepStat[y][x]
+                    free_side += num_free_side * sheepStat[y][x]
+                    if num_free_side == 0:
+                        stuck_penalty += sheepStat[y][x] - 1 
                 else:
-                    free_side -= calculate_free_side(Pos(x,y)) * sheepStat[y][x]
+                    free_side -= num_free_side * sheepStat[y][x]
+    
+    ### Weights 
+    w_free_side = 0.5
+    w_stuck_penalty = 100
 
-    value = 0.5*free_side + get_score(playerID,state)
+    value = w_free_side * free_side + get_score(playerID,state) - w_stuck_penalty * stuck_penalty
    
     return value
 
@@ -351,8 +359,8 @@ def GetStep(playerID, mapStat, sheepStat):
             max_value = the_value
             max_action = action
     
-    print_mapStat(mapStat)
-    print_sheepStat(sheepStat)
+    #print_mapStat(mapStat)
+    #print_sheepStat(sheepStat)
 
     if max_action:
         step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
