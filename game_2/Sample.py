@@ -151,8 +151,8 @@ def inBoard(pos: Pos):
 def isEmpty(mapStat, pos):
     return mapStat[pos.y][pos.x] == 0
 
-def isAlly(playerID, mapStat, pos):
-    return mapStat[pos.y][pos.x] == playerID
+# def isAlly(playerID, mapStat, pos):
+#     return mapStat[pos.y][pos.x] == playerID
 
 def straight_line_end(mapStat, pos, direction):
     currentPos = pos
@@ -211,30 +211,29 @@ def evaluation_function(playerID,state: GameState):
                 count += 1
         return count
     
-    def calculate_adjacent_ally(pos):
-        dx = [1,1,1,0,0,-1,-1,-1]
-        dy = [1,0,-1,1,-1,1,0,-1]
+    # def calculate_adjacent_ally(pos):
+    #     dx = [1,1,1,0,0,-1,-1,-1]
+    #     dy = [1,0,-1,1,-1,1,0,-1]
 
-        x = pos.x
-        y = pos.y
+    #     x = pos.x
+    #     y = pos.y
 
-        count = 0
-        for k in range(8):
-            newPos = Pos(x+dx[k],y+dy[k])
-            if inBoard(newPos) and isAlly(playerID, mapStat, pos):
-                count += 1
-        return count
+    #     count = 0
+    #     for k in range(8):
+    #         newPos = Pos(x+dx[k],y+dy[k])
+    #         if inBoard(newPos) and isAlly(playerID, mapStat, pos):
+    #             count += 1
+    #     return count
 
     value = 0
     free_side = 0
-    ally_side = 0
     stuck_penalty = 0
     for y in range(size):
         for x in range(size):
             if mapStat[y][x]>=1 and mapStat[y][x]<=4 and sheepStat[y][x] > 1:
                 num_free_side = calculate_free_side(Pos(x,y))
                 if mapStat[y][x] == playerID:
-                    free_side += (num_free_side + calculate_adjacent_ally(Pos(x,y))) * sheepStat[y][x]
+                    free_side += num_free_side * sheepStat[y][x]
                     if num_free_side == 0:
                         stuck_penalty += sheepStat[y][x] - 1 
                 else:
