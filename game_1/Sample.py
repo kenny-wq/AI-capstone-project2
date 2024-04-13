@@ -204,16 +204,43 @@ def evaluation_function(playerID,state: GameState):
         return count
 
     value = 0
+    free_side = 0
     for y in range(size):
         for x in range(size):
             if mapStat[y][x]>=1 and mapStat[y][x]<=4 and sheepStat[y][x] > 1:
                 if mapStat[y][x] == playerID:
-                    value += calculate_free_side(Pos(x,y)) * sheepStat[y][x]
+                    free_side += calculate_free_side(Pos(x,y)) * sheepStat[y][x]
                 else:
-                    value -= calculate_free_side(Pos(x,y)) * sheepStat[y][x]
+                    free_side -= calculate_free_side(Pos(x,y)) * sheepStat[y][x]
 
-    
+    value = 0.5*free_side + get_score(playerID,state)
+   
     return value
+
+def dfs(mapStat, playerID, board_size, visited, i, j):
+        if i < 0 or i >= board_size or j < 0 or j >= board_size or visited[i][j] or mapStat[i][j] != playerID:
+            return 0
+        visited[i][j] = True
+        return 1 + dfs(mapStat, playerID, board_size, visited, i - 1, j) \
+                    + dfs(mapStat, playerID, board_size, visited, i + 1, j) \
+                    + dfs(mapStat, playerID, board_size, visited, i, j - 1) \
+                    + dfs(mapStat, playerID, board_size, visited, i, j + 1)
+
+def get_connected_cell(mapStat, playerID, board_size=12):
+    connected_cell = []
+    visited = [[False for _ in range(board_size)] for _ in range(board_size)]
+    for i in range(board_size):
+        for j in range(board_size):
+            # go through cells connected but unvisited
+            if mapStat[i][j] == playerID and not visited[i][j]:
+                connected_cell.append(dfs(mapStat, playerID, board_size, visited, i, j))
+    return connected_cell
+
+def get_score(playerID, state:GameState):
+    mapStat = state.mapStat
+    sheepStat = state.sheepStat
+    cells = get_connected_cell(mapStat, playerID)
+    return round(sum([cell ** 1.25 for cell in cells]))
 
 def find_max_value(playerID, state: GameState, alpha, beta, depth):
     if depth == 2:
