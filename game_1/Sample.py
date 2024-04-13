@@ -2,6 +2,7 @@ import STcpClient
 import numpy as np
 import random
 from copy import deepcopy
+import math
 
 size=12
 
@@ -162,22 +163,26 @@ def straight_line_end(mapStat, pos, direction):
 def getChildStates(playerID, state: GameState):
     mapStat = state.mapStat
     sheepStat = state.sheepStat
-    actions = get_actions(playerID, state)
     childStates = []
-    for action in actions:
-        pos = action.pos
-        farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
 
-        newMapStat = deepcopy(mapStat)
-        newSheepStat = deepcopy(sheepStat)
+    for cur_playerID in range(1,5):
+        if cur_playerID == playerID:  ## Only consider enemy actions
+            continue
+        actions = get_actions_half(cur_playerID, state)
+        for action in actions:
+            pos = action.pos
+            farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
 
-        newSheepStat[pos.y][pos.x] -= action.sheep_number
-        newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
+            newMapStat = deepcopy(mapStat)
+            newSheepStat = deepcopy(sheepStat)
 
-        newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = playerID
+            newSheepStat[pos.y][pos.x] -= action.sheep_number
+            newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
 
-        childStates.append(GameState(newMapStat,newSheepStat))
-    
+            newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = cur_playerID
+
+            childStates.append(GameState(newMapStat,newSheepStat))
+        
     return childStates
 
 def evaluation_function(playerID,state: GameState):
@@ -253,6 +258,24 @@ def get_actions(playerID, state: GameState) -> list[Action]:
                         sheep_number_in_this_pos = sheepStat[pos.y][pos.x]
                         for n in range(1,int(sheep_number_in_this_pos)):
                             newActions.append(Action(pos,n,Direction(dy[k],dx[k])))
+
+    return newActions
+
+def get_actions_half(playerID, state: GameState) -> list[Action]: # Get actions but only consider half sheep split
+    dx = [1,1,1,0,0,-1,-1,-1]
+    dy = [1,0,-1,1,-1,1,0,-1]
+    mapStat = state.mapStat
+    sheepStat = state.sheepStat
+    newActions = []
+    for y in range(size):
+        for x in range(size):
+            if mapStat[y][x] == playerID and sheepStat[y][x]>1:
+                pos = Pos(x,y)
+                for k in range(8):
+                    farest_pos_in_the_direction = straight_line_end(mapStat,pos,Direction(dy[k],dx[k]))
+                    if farest_pos_in_the_direction!=pos:
+                        sheep_number_in_this_pos = sheepStat[pos.y][pos.x]
+                        newActions.append(Action(pos,math.floor(sheep_number_in_this_pos/2),Direction(dy[k],dx[k])))
 
     return newActions
 '''
