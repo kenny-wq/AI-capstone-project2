@@ -12,7 +12,6 @@ infoServer = ["localhost", 8887]
 '''
 idTeam = 4
 
-
 def _Connect(ip, port):
     socketCurrent = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

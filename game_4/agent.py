@@ -1,3 +1,8 @@
+'''
+    Team 10 : 
+    Members : 0816199陳清海  109550135范恩宇  109550055李耕雨
+'''
+
 import STcpClient
 import numpy as np
 import random
@@ -102,7 +107,7 @@ class GameSimulation:
         return best_init
 
     # check direction when reach boundary of the map / hit something not 0
-    def check_direction(self, x, y, dir, mapStat):
+    def straight_line_end(self, x, y, dir, mapStat):
         dx, dy = self.dir_value(dir)
         while True:
             if not (0 <= x + dx < len(mapStat) and 0 <= y + dy < len(mapStat[0])):
@@ -116,16 +121,16 @@ class GameSimulation:
         return (x, y)
 
     # apply action to get new states
-    def apply_action(self, state, action):
+    def getChildStates(self, state, action):
         playerID, mapStat, sheepStat = state
-        newMapStat = mapStat.copy()
-        newSheepStat = sheepStat.copy()
+        newMapStat = deepcopy(mapStat)
+        newSheepStat = deepcopy(sheepStat)
         
         x, y = action[0]
         m = action[1]
         dir = action[2]
 
-        newx, newy = self.check_direction(x, y, dir, mapStat)
+        newx, newy = self.straight_line_end(x, y, dir, mapStat)
         # update map & sheep state, playerID
         newMapStat[newx][newy] = playerID
         newSheepStat[x][y] -= m
@@ -147,7 +152,7 @@ class GameSimulation:
                     sheep_splitable.append((i, j))
         for i, j in sheep_splitable:
             for dir in self.dir_possible():
-                newx, newy = self.check_direction(i, j, dir, mapStat)
+                newx, newy = self.straight_line_end(i, j, dir, mapStat)
                 if newx == i and newy == j:
                     continue
                 m = int(sheepStat[i][j]) // 2
@@ -191,10 +196,12 @@ class GameSimulation:
         cells = self.get_connected_cell(mapStat, playerID)
         return round(sum([cell ** 1.25 for cell in cells]))
 
+    """
     def get_winner(self, state):
         playerID, mapStat, sheepStat = state
         scores = [self.get_score((i, mapStat, sheepStat)) for i in range(1, 5)]
         return scores.index(max(scores)) + 1
+    """
 
     def get_winner_group(self, state):
         scores = [self.get_score((i, state[1], state[2])) for i in range(1, 5)]
@@ -223,7 +230,7 @@ class UctMctsAgent:
         self.tree = Tree(state)
         self.playerID = state[0]
         self.rule_id = rule_id
-        self.node_ct = 64                         # for changing cell num if needed # 300
+        self.node_ct = 250                        # number of search iterations
         self.game_simulation = GameSimulation(12) # for changing size if needed
 
     def select_node(self, node):
@@ -234,7 +241,7 @@ class UctMctsAgent:
     def add_child(self, node):
         actions = self.game_simulation.remain_space(node.state)#self.remain_space(node.state)
         for action in actions:
-            new_states = self.game_simulation.apply_action(node.state, action)
+            new_states = self.game_simulation.getChildStates(node.state, action)
             new_node = Node(new_states, action, node)
             node.children.append(new_node)
 
@@ -247,7 +254,7 @@ class UctMctsAgent:
                 continue
 
             action = random.choice(actions)
-            state = self.game_simulation.apply_action(state, action)
+            state = self.game_simulation.getChildStates(state, action)
 
         # team up 1+3 & 2+4, self.rule_id == 4
         group_pair = 1
@@ -283,6 +290,7 @@ class UctMctsAgent:
         return node.reward / node.visit_time + (2 * np.log(node.parent.visit_time) / node.visit_time) ** 0.5
 
     def best_move(self):
+        # find cell with more spaces around the starting point
         root = self.tree.root
         for _ in range(self.node_ct):
             target = self.select_node(root)
