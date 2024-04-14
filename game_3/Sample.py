@@ -81,9 +81,9 @@ def print_mapStat(mapStat):
     print("map stat")
     for y in range(size):
         for x in range(size):
-            if mapStat[y][x]<=4 and mapStat[y][x]>=1:
-                print(int(mapStat[y][x]),end=" ")
-            elif mapStat[y][x]==-1:
+            if mapStat[x][y]<=4 and mapStat[x][y]>=1:
+                print(int(mapStat[x][y]),end=" ")
+            elif mapStat[x][y]==-1:
                 print("x",end=" ")
             else:
                 print(".",end=" ")
@@ -178,22 +178,26 @@ def straight_line_end(mapStat, pos, direction):
 def getChildStates(playerID, state: GameState):
     mapStat = state.mapStat
     sheepStat = state.sheepStat
-    actions = get_actions(playerID, state)
     childStates = []
-    for action in actions:
-        pos = action.pos
-        farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
 
-        newMapStat = deepcopy(mapStat)
-        newSheepStat = deepcopy(sheepStat)
+    for cur_playerID in range(1,5):
+        if cur_playerID == playerID:  ## Only consider enemy actions
+            continue
+        actions = get_actions_opp(cur_playerID, state)
+        for action in actions:
+            pos = action.pos
+            farest_pos_in_the_direction = straight_line_end(mapStat, pos, action.direction)
 
-        newSheepStat[pos.y][pos.x] -= action.sheep_number
-        newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
+            newMapStat = deepcopy(mapStat)
+            newSheepStat = deepcopy(sheepStat)
 
-        newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = playerID
+            #newSheepStat[pos.y][pos.x] -= action.sheep_number
+            #newSheepStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] += action.sheep_number
 
-        childStates.append(GameState(newMapStat,newSheepStat))
-    
+            newMapStat[farest_pos_in_the_direction.y][farest_pos_in_the_direction.x] = cur_playerID
+
+            childStates.append(GameState(newMapStat,newSheepStat))
+        
     return childStates
 
 def evaluation_function(playerID,state: GameState):
@@ -215,16 +219,51 @@ def evaluation_function(playerID,state: GameState):
         return count
 
     value = 0
+    free_side = 0
+    stuck_penalty = 0
     for y in range(size):
         for x in range(size):
-            if mapStat[y][x]>=1 and mapStat[y][x]<=4 and sheepStat[y][x] > 1:
-                if mapStat[y][x] == playerID:
-                    value += calculate_free_side(Pos(x,y)) * sheepStat[y][x]
+            if mapStat[y][x]>=1 and mapStat[y][x]<=4:
+                num_free_side = calculate_free_side(Pos(x,y))
+                if mapStat[y][x] == playerID and sheepStat[y][x] > 1:
+                    free_side += num_free_side * sheepStat[y][x]
+                    if num_free_side == 0:
+                        stuck_penalty += sheepStat[y][x] - 1 
                 else:
-                    value -= calculate_free_side(Pos(x,y)) * sheepStat[y][x]
-
+                    free_side -= num_free_side * 1
     
+    ### Weights 
+    w_free_side = 0.5
+    w_stuck_penalty = 100
+
+    value = w_free_side * free_side + get_score(playerID,state) - w_stuck_penalty * stuck_penalty
+   
     return value
+
+def dfs(mapStat, playerID, board_size, visited, i, j):
+        if i < 0 or i >= board_size or j < 0 or j >= board_size or visited[i][j] or mapStat[i][j] != playerID:
+            return 0
+        visited[i][j] = True
+        return 1 + dfs(mapStat, playerID, board_size, visited, i - 1, j) \
+                    + dfs(mapStat, playerID, board_size, visited, i + 1, j) \
+                    + dfs(mapStat, playerID, board_size, visited, i, j - 1) \
+                    + dfs(mapStat, playerID, board_size, visited, i, j + 1)
+
+def get_connected_cell(mapStat, playerID, board_size=12):
+    connected_cell = []
+    visited = [[False for _ in range(board_size)] for _ in range(board_size)]
+    for i in range(board_size):
+        for j in range(board_size):
+            # go through cells connected but unvisited
+            if mapStat[i][j] == playerID and not visited[i][j]:
+                connected_cell.append(dfs(mapStat, playerID, board_size, visited, i, j))
+    return connected_cell
+
+def get_score(playerID, state:GameState):
+    mapStat = state.mapStat
+    sheepStat = state.sheepStat
+    cells = get_connected_cell(mapStat, playerID)
+    return round(sum([cell ** 1.25 for cell in cells]))
 
 def find_max_value(playerID, state: GameState, alpha, beta, depth):
     if depth == 2:
@@ -272,6 +311,23 @@ def get_actions(playerID, state: GameState) -> list[Action]:
 
     return newActions
 
+def get_actions_opp(playerID, state: GameState) -> list[Action]: # Get opponent actions, assume theres always enough sheep to split
+    dx = [1,1,1,0,0,-1,-1,-1]
+    dy = [1,0,-1,1,-1,1,0,-1]
+    mapStat = state.mapStat
+    #sheepStat = state.sheepStat
+    newActions = []
+    for y in range(size):
+        for x in range(size):
+            if mapStat[y][x] == playerID:
+                pos = Pos(x,y)
+                for k in range(8):
+                    farest_pos_in_the_direction = straight_line_end(mapStat,pos,Direction(dy[k],dx[k]))
+                    if farest_pos_in_the_direction!=pos:
+                        #sheep_number_in_this_pos = sheepStat[pos.y][pos.x]
+                        newActions.append(Action(pos,1,Direction(dy[k],dx[k])))
+
+    return newActions
 '''
     產出指令
     
@@ -335,8 +391,8 @@ def GetStep(playerID, mapStat, sheepStat):
             max_value = the_value
             max_action = action
     
-    print_mapStat(mapStat)
-    print_sheepStat(sheepStat)
+    #print_mapStat(mapStat)
+    #print_sheepStat(sheepStat)
 
     if max_action:
         step = [(max_action.pos.x,max_action.pos.y), max_action.sheep_number, max_action.direction.mapping()]
@@ -347,6 +403,7 @@ def GetStep(playerID, mapStat, sheepStat):
 
 # player initial
 (id_package, playerID, mapStat) = STcpClient.GetMap()
+print_mapStat(mapStat)
 init_pos = InitPos(mapStat)
 STcpClient.SendInitPos(id_package, init_pos)
 

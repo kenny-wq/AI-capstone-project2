@@ -366,7 +366,7 @@ def GetStep(playerID, mapStat, sheepStat):
             max_value = the_value
             max_action = action
     
-    #print_mapStat(mapStat)
+    print_mapStat(mapStat)
     #print_sheepStat(sheepStat)
 
     if max_action:
