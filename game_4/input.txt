@@ -6,4 +6,4 @@
 ./sample/Sample_3.exe
 10
 ./sample/Sample_4.exe
-10
+4
