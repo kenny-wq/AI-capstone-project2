@@ -1,7 +1,16 @@
+# Team Name: Eevee Lovers
+# Team ID: 10
+### MEMBERS ###
+# 陳清海 0816199
+# 范恩宇 109550135
+# 李耕雨 109550055
+
 import STcpClient
 import numpy as np
 import random
 from copy import deepcopy
+import math
+import time
 
 size=12
 

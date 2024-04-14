@@ -10,7 +10,7 @@ infoServer = ["localhost", 8887]
 '''
     *   請將 idTeam 改成組別    *
 '''
-idTeam = 4
+idTeam = 10
 
 def _Connect(ip, port):
     socketCurrent = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
