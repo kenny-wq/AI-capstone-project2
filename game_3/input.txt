@@ -6,5 +6,5 @@
 ./sample/Sample_3.exe
 4
 ./sample/Sample_4.exe
-10
+3
 
