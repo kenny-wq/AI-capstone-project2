@@ -5,10 +5,16 @@
 # 范恩宇 109550135
 # 李耕雨 109550055
 
+#python -m PyInstaller --onefile team10_agent4.py --name Sample_4.exe
+
 import STcpClient
 import numpy as np
 import random
 from copy import deepcopy
+import math
+import time
+
+start_time = time.time()
 
 class GameState:
     def __init__(self, mapStat, sheepStat):
